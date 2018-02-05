@@ -20,10 +20,37 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
+resource "aws_security_group" "personal-site" {
+	name 				= "personal-site"
+	description = "allow traffic on port 8080"
+
+	ingress {
+		from_port 	= 8080
+		to_port 		= 8080
+		protocol  	= "tcp"
+		cidr_blocks = ["0.0.0.0/0"]
+	}
+
+	ingress {
+		from_port = 22
+		to_port 	= 22
+		protocol  = "tcp"
+		cidr_blocks = ["0.0.0.0/0"]
+	}
+
+	egress {
+		from_port = 0
+		to_port 	= 0
+		protocol  = "-1"
+		cidr_blocks = ["0.0.0.0/0"]
+	}
+}
+
 resource "aws_instance" "site-host" {
-	ami           = "${data.aws_ami.ubuntu.id}"
-  instance_type = "t2.micro"
-	key_name 			= "personal-site"
+	ami           	= "${data.aws_ami.ubuntu.id}"
+  instance_type 	= "t2.micro"
+	key_name 				= "personal-site"
+	security_groups = ["${aws_security_group.personal-site.name}"]
 
 	provisioner "file" {
 		source 			= "/home/whammond/go/bin/personal-site"
