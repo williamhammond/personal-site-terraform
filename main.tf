@@ -1,7 +1,7 @@
 provider "aws" {
 	access_key = "${var.access_key}"
 	secret_key = "${var.secret_key}"
-	region = "${var.region}"
+	region 	   = "${var.region}"
 }
 
 data "aws_ami" "ubuntu" {
@@ -21,27 +21,27 @@ data "aws_ami" "ubuntu" {
 }
 
 resource "aws_security_group" "personal-site" {
-	name 				= "personal-site"
+	name 		= "personal-site"
 	description = "allow traffic on port 8080"
 
 	ingress {
 		from_port 	= 8080
-		to_port 		= 8080
+		to_port 	= 8080
 		protocol  	= "tcp"
 		cidr_blocks = ["0.0.0.0/0"]
 	}
 
 	ingress {
-		from_port = 22
+		from_port 	= 22
 		to_port 	= 22
-		protocol  = "tcp"
+		protocol  	= "tcp"
 		cidr_blocks = ["0.0.0.0/0"]
 	}
 
 	egress {
-		from_port = 0
+		from_port 	= 0
 		to_port 	= 0
-		protocol  = "-1"
+		protocol  	= "-1"
 		cidr_blocks = ["0.0.0.0/0"]
 	}
 }
@@ -54,11 +54,11 @@ resource "aws_instance" "site-host" {
 
 	provisioner "file" {
 		source 			= "/home/whammond/go/bin/personal-site"
-		destination = "./personal-site"
+		destination 	= "./personal-site"
 		
 		connection {
 			type        = "ssh"
-			user 			  = "ubuntu"
+			user 		= "ubuntu"
 			private_key = "${file("~/.ssh/personal-site.pem")}"
 		}
 	}
@@ -72,7 +72,7 @@ resource "aws_instance" "site-host" {
 
 		connection {
 			type        = "ssh"
-			user 			  = "ubuntu"
+			user 		= "ubuntu"
 			private_key = "${file("~/.ssh/personal-site.pem")}"
 		}
 	}
