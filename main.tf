@@ -22,7 +22,7 @@ data "aws_ami" "ubuntu" {
 
 resource "aws_security_group" "personal-site" {
 	name          = "personal-site"
-	description   = "allow traffic on port 8080"
+	description   = "Allow general traffic to the webserver and allow administrative access to owner."
 
 	ingress {
 		from_port   = 8080
@@ -48,12 +48,12 @@ resource "aws_security_group" "personal-site" {
 
 resource "aws_instance" "site-host" {
 	ami           	= "${data.aws_ami.ubuntu.id}"
-  instance_type 	= "t2.micro"
-	key_name 				= "personal-site"
+  	instance_type 	= "t2.micro"
+	key_name 		= "personal-site"
 	security_groups = ["${aws_security_group.personal-site.name}"]
 
 	provisioner "file" {
-		source 			  = "/home/whammond/go/bin/personal-site"
+		source 			= "/home/whammond/go/bin/personal-site"
 		destination 	= "./personal-site"
 		
 		connection {
